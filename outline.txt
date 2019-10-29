@@ -1,0 +1,16 @@
+Get Text Data Module
+Store in Database
+
+Get Image Data Module
+Store in Database
+
+Take Database Data
+Display River Data on a map
+
+
+Image module notes:
+If the markers are a specific color, we can do trivial color proc to isolate
+
+Found a couple papers about reflection detection and associated techniques (OCR might help? Upside down letters good indicator of reflection)
+
+Tesseract OCR (google) as a way to find all text features of the image
