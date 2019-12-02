@@ -14,3 +14,7 @@ If the markers are a specific color, we can do trivial color proc to isolate
 Found a couple papers about reflection detection and associated techniques (OCR might help? Upside down letters good indicator of reflection)
 
 Tesseract OCR (google) as a way to find all text features of the image
+
+
+11/1 Notes:
+Finding the water level is actually easier if the water is dirty - just find the lowest number available, and then count notches in some way
