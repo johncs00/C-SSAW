@@ -1,0 +1,26 @@
+db.CSSAW.insert(
+{
+	name: "River2",
+	Sub_Region: "SubR2",
+	Gauges: [
+		{
+			Station: "1",
+			Date: Date(),
+			Place: "P1",
+			Reading: "54.7",
+		},
+		{
+			Station: "2",
+			Date: Date(),
+			Place: "P2",
+			Reading: "33.3"
+		},
+		{
+			Station: "3",
+			Date: Date(),
+			Place: "P3",
+			Reading: "58.99"
+		}
+	]
+}
+)
