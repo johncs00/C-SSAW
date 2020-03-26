@@ -72,6 +72,6 @@ if __name__ == '__main__':
     message = client.messages \
     .create(
          body='Server Up!',
-         from_='+14782421893',
-         to='+19493428775'
+         from_='+twilio_number',
+         to='+devs_phone_number'
      )
