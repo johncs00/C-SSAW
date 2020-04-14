@@ -25,6 +25,14 @@ if __name__ == '__main__':
 				print("user does not exist")
 				valid = 0
 
+			else:
+				c2 = db.users.find( { "Name" : username , "Password" : pw_hash_dig}).count()
+				if (c2 == 0):
+					print("invalid password!")
+					valid = 0
+				else:
+					print("Welcome, " + username)
+
 
 
 
@@ -46,7 +54,7 @@ if __name__ == '__main__':
 			pw_hash = hashlib.sha256(pw.encode())
 			pw_hash_dig = pw_hash.hexdigest()
 
-			userAdd = {"Name" : username, "Password" : pw}
+			userAdd = {"Name" : username, "Password" : pw_hash_dig}
 			user_id = users.insert_one(userAdd).inserted_id
 
 			print("Added user " + username + ". Please log in")
