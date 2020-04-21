@@ -3,7 +3,8 @@ import hashlib
 import sys
 from pymongo import MongoClient
 
-if __name__ == '__main__':
+def getUsername():
+
 	valid = 0
 	#f = open("temp.txt", "a")
 	client = MongoClient()
@@ -32,11 +33,9 @@ if __name__ == '__main__':
 					valid = 0
 				else:
 					print("Welcome, " + username)
+					return username
 
 
-
-
-			
 		elif (d.upper() == "C"):
 			#check if username is already taken
 			username = input("Username: ")
@@ -64,6 +63,11 @@ if __name__ == '__main__':
 			sys.exit()
 		else:
 			print("Invalid selection")
+
+if __name__ == '__main__':
+	
+	client_username = getUsername()
+	print(client_username)
 
 
 	#f.truncate(0)
