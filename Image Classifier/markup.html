@@ -5,8 +5,7 @@
     <title>Image Classifier</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.0.min.js"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
@@ -38,7 +37,7 @@
             grid-template-rows: repeat(4, 200px);
             grid-column-gap: 0px;
             grid-row-gap: 0px;
-            width:max-content;
+            width: max-content;
             margin-top: 50px;
             padding: 20px;
             background-color: lightcoral;
@@ -161,9 +160,9 @@
     <!-- 
         Preloade images 
     -->
-    <img id="currentImage" hidden src="markup3.jpg" imageId="imageIdWouldBeHere" />
-    <img id="nextImage" hidden src="" />
-    <img id="nextNextImage" hidden src="" />
+    <img id="image1" hidden src="markup.jpg" imageId="imageIdWouldBeHere" />
+    <img id="image2" hidden src="markup2.jpg" />
+    <img id="image3" hidden src="markup3.jpg" />
 
 
     <!-- TODO: handle the button clicks.-->
@@ -183,6 +182,8 @@
         canvasHeight = c.offsetHeight;
         var markupContex = c.getContext("2d");
 
+        var currentImage = 1;
+
         var previewSection = document.getElementById("previewSpace");
 
         previewContext = previewSection.getContext("2d");
@@ -191,13 +192,13 @@
         previewContext.fill();
 
         window.onload = function () {
-            var img = document.getElementById("currentImage");
+            var img = document.getElementById("image" + currentImage);
             markupContex.drawImage(img, 0, 0, canvasWidth, canvasHeight);
 
             imageWidth = img.width;
             imageHeight = img.height;
         };
-        var parseWaterLevel = function(data){
+        var parseWaterLevel = function (data) {
             if (data[data.length - 1] == "m") {
                 data = data.substring(0, data.length - 1);
             }
@@ -211,7 +212,7 @@
             currentCoords.x = (e.clientX - topLeft.left) * (imageWidth / canvasWidth);
             currentCoords.y = (e.clientY - topLeft.top) * (imageHeight / canvasHeight);
 
-            var img = document.getElementById("currentImage");
+            var img = document.getElementById("image" + currentImage);
             markupContex.drawImage(img, 0, 0, canvasWidth, canvasHeight);
             markupContex.lineWidth = 2;
             markupContex.beginPath();
@@ -224,8 +225,8 @@
         $("#markupSpace").mousemove(function (e) {
             topLeft = c.getBoundingClientRect();
 
-            var img = document.getElementById("currentImage");
-            previewContext.fillStyle = "black";
+            var img = document.getElementById("image" + currentImage);
+
             previewContext.rect(0, 0, 400, 400);
             previewContext.fill();
             previewContext.fillStyle = "#FFFACD";
@@ -283,27 +284,46 @@
             }
         });
 
-        $("#nextImage").click(function(){
-            console.log ("next clicked");
+        $("#nextImage").click(function () {
+
+            console.log("next clicked");
             if (currentCoords.x == -1) {
                 alert("Please select the waterline on the image")
+            } else if ($("#waterLevelInput").val() == "0.0m") {
+                alert("Please give a water level");
             } else {
+                currentImage++;
+                if (currentImage > 3) {
+                    currentImage = 1;
+                }
+            
+                var img = document.getElementById("image" + currentImage);
+                markupContex.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+
+                imageWidth = img.width;
+                imageHeight = img.height;
+                previewContext.rect(0, 0, 400, 400);
+                previewContext.fill();
+                previewContext.fillStyle = "#FFFACD";
                 //{image_id, identified_water_level(in meters),  coords_of_waterline:{x,y}} (user is identified via session id)
-                data = {image_id: "ids not implemented", identified_water_level: parseWaterLevel( $("#waterLevelInput").val() ), coords_of_waterline:{x:currentCoords.x,y:currentCoords.y}};
-                alert(JSON.stringify(data));
+                data = { image_id: "ids not implemented", identified_water_level: parseWaterLevel($("#waterLevelInput").val()), coords_of_waterline: { x: currentCoords.x, y: currentCoords.y } };
+                // alert(JSON.stringify(data));
                 console.log(JSON.stringify(data));
                 $.ajax({
                     type: 'post',
                     url: 'http://127.0.0.1:XXXX',
                     data: JSON.stringify(data),
-                    success: function(data){
-                        alert(data);    
-                        
+                    success: function (data) {
+                        // alert("Data reached the server");    
+                        // TODO: This is where you preload the image into the last spot (kinda current image - 12)
                     },
-                    error: function(data){
-                        alert(data);
+                    error: function (data) {
+                        // alert("Never reached the server");
                     }
                 })
+
+                $("#waterLevelInput").val("0.0m");
+                currentCoords.x = -1;
             }
         })
         // TODO: Create a listener for the input so that it can see if the value allows for the decrement button to be pressed
