@@ -1,6 +1,0 @@
-twilio
-flask
-google-cloud-storage
-pymongo
-dnspython
-pillow
